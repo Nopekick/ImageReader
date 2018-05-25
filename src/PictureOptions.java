@@ -5,11 +5,16 @@ import java.awt.geom.Rectangle2D;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+
+import com.github.sarxos.webcam.Webcam;
+
+import net.coobird.thumbnailator.Thumbnails;
+
 import java.io.File;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-//import com.github.sarxos.webcam.Webcam;
+
 
 public class PictureOptions extends JPanel {
 	
@@ -82,18 +87,12 @@ public class PictureOptions extends JPanel {
 	    		takeScrnsht.addActionListener(new ActionListener() {
 		            @Override
 		            public void actionPerformed(ActionEvent e) {   
-		            	System.out.println("end of screenshot listener");
-//			           try {
-//			        		System.out.println("end of screenshot listener");
-//		            		Webcam webcam = Webcam.getDefault();
-//			            	webcam.open();
-//			            img = webcam.getImage();
-//			            ac.setImg(img);
-//			          //ImageIO.write(img, "JPG", new File("test.jpg"));
-//			            	System.out.println("end of screenshot listener");
-//			           } catch(IOException io) {
-//			        	   	System.out.println("Error: "+io);
-//			           }
+			        		Webcam webcam = Webcam.getDefault();
+			        		webcam.open();
+			        		img = resize(webcam.getImage(), 800, 800);
+			        		webcam.close();
+			        		pc.setImg(img);
+			        		
 		            }
 		     });
 	    		
@@ -121,6 +120,14 @@ public class PictureOptions extends JPanel {
 	            }
 			});
 		}
+		
+		public static BufferedImage resize(BufferedImage img, int newW, int newH) {
+			  try {
+			return Thumbnails.of(img).size(newW, newH).asBufferedImage();
+			  } catch(IOException io) {
+				  return img;
+			  }
+			}
 		
 		public void inputCanvas(PicCanvas pc) {
 			this.pc = pc;
